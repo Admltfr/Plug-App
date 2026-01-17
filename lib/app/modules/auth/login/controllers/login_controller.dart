@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:plug/app/data/network/services/auth_service.dart';
 import 'package:plug/app/routes/app_pages.dart';
+import 'package:plug/app/utils/logger.dart';
 
 class LoginController extends GetxController {
   final AuthService authService;
@@ -19,6 +20,7 @@ class LoginController extends GetxController {
         email: emailController.text.trim(),
         password: passwordController.text,
       );
+      logInfo('Navigasi ke HOME setelah login', tag: 'LoginController');
       Get.offAllNamed(Routes.HOME);
     } catch (e) {
       Get.snackbar(

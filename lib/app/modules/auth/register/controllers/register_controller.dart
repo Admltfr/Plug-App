@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:plug/app/data/network/services/auth_service.dart';
 import 'package:plug/app/constants/app_enums.dart';
+import 'package:plug/app/utils/logger.dart';
 
 class RegisterController extends GetxController {
   final AuthService authService;
@@ -37,6 +38,7 @@ class RegisterController extends GetxController {
         passwordConfirmation: confirm,
         role: selectedRole.value,
       );
+      logInfo('Registrasi sukses, kembali ke login', tag: 'RegisterController');
       Get.back();
       Get.snackbar(
         'Berhasil',

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:plug/app/data/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:plug/app/utils/logger.dart';
 
 class ApiClient {
   static final String? baseUrl = dotenv.env['BASEURL'];
@@ -14,5 +15,6 @@ class ApiClient {
       private = Dio(BaseOptions(baseUrl: url)),
       authInterceptor = AuthInterceptor() {
     private.interceptors.add(authInterceptor);
+    logInfo('ApiClient initialized at $url', tag: 'ApiClient');
   }
 }
