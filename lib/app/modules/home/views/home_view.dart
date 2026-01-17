@@ -54,7 +54,11 @@ class HomeView extends GetView<HomeController> {
                   itemBuilder: (_, i) {
                     final p = controller.products[i];
                     return InkWell(
-                      onTap: () => Get.toNamed('${Routes.PRODUCT}/${p.id}'),
+                      onTap:
+                          () => Get.toNamed(
+                            Routes.PRODUCT,
+                            parameters: {'id': p.id},
+                          ),
                       child: Card(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

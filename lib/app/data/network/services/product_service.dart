@@ -61,9 +61,8 @@ class ProductService {
     );
     if (response == null) throw Exception('Gagal memuat detail produk.');
 
-    final payload = response.data;
-    final data = payload['data'];
-
-    return Product.fromJson(Map<String, dynamic>.from(data.first as Map));
+    final data =
+        (response.data as Map<String, dynamic>)['data'] as Map<String, dynamic>;
+    return Product.fromJson(data);
   }
 }
