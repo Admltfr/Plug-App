@@ -3,6 +3,7 @@ import 'package:plug/app/data/network/api_client.dart';
 import 'package:plug/app/constants/app_enums.dart';
 import 'package:plug/app/utils/try_catcher.dart';
 import 'package:plug/app/utils/logger.dart';
+import 'package:plug/app/utils/token_storage.dart';
 
 class AuthService {
   final ApiClient apiClient;
@@ -19,7 +20,7 @@ class AuthService {
       );
 
       final data = response.data;
-      final token =
+      final t =
           data?['accessToken'] ??
           data?['token'] ??
           data?['access_token'] ??
@@ -27,19 +28,26 @@ class AuthService {
           data?['data']?['token'] ??
           data?['data']?['access_token'];
 
-      if (token is! String || token.isEmpty) {
+      if (t is! String || t.isEmpty) {
         throw Exception('Token tidak ditemukan pada response.');
       }
 
-      apiClient.authInterceptor.authToken = token;
+      apiClient.authInterceptor.authToken = t;
+      await TokenStorage.saveToken(t);
+
       logSuccess('Login berhasil untuk $email', tag: 'AuthLogin');
-      return token;
+      return t;
     }, tag: 'AuthLogin');
 
     if (token == null) {
       throw Exception('Login gagal. Periksa kredensial atau koneksi.');
     }
     return token;
+  }
+
+  Future<void> logout() async {
+    apiClient.authInterceptor.authToken = null;
+    await TokenStorage.clearToken();
   }
 
   Future<void> register({

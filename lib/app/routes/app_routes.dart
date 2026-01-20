@@ -7,6 +7,9 @@ abstract class Routes {
   static const LOGIN = _Paths.LOGIN;
   static const REGISTER = _Paths.REGISTER;
   static const PRODUCT = _Paths.PRODUCT;
+  static const WAREHOUSE = _Paths.WAREHOUSE;
+  static const SUBSCRIPTION_CREATE = _Paths.SUBSCRIPTION_CREATE;
+  static const SUBSCRIPTIONS = _Paths.SUBSCRIPTIONS;
 }
 
 abstract class _Paths {
@@ -15,4 +18,7 @@ abstract class _Paths {
   static const LOGIN = '/login';
   static const REGISTER = '/register';
   static const PRODUCT = '/product';
+  static const WAREHOUSE = '/warehouse';
+  static const SUBSCRIPTION_CREATE = '/subscription-create';
+  static const SUBSCRIPTIONS = '/subscriptions';
 }

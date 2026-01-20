@@ -7,6 +7,7 @@ class Product {
   final int price;
   final int stock;
   final String? imageUrl;
+  final String warehouseId;
   final Seller seller;
 
   Product({
@@ -16,6 +17,7 @@ class Product {
     required this.price,
     required this.stock,
     this.imageUrl,
+    required this.warehouseId,
     required this.seller,
   });
 
@@ -26,6 +28,7 @@ class Product {
     price: (j['price'] as num).toInt(),
     stock: (j['stock'] as num).toInt(),
     imageUrl: j['image_url'],
+    warehouseId: j['warehouse_id'],
     seller: Seller.fromJson(j['seller']),
   );
 }

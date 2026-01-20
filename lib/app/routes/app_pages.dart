@@ -8,6 +8,12 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/product/bindings/product_binding.dart';
 import '../modules/product/views/product_view.dart';
+import '../modules/subscription/subscription_create/bindings/subscription_create_binding.dart';
+import '../modules/subscription/subscription_create/views/subscription_create_view.dart';
+import '../modules/subscription/subscriptions/bindings/subscriptions_binding.dart';
+import '../modules/subscription/subscriptions/views/subscriptions_view.dart';
+import '../modules/warehouse/bindings/warehouse_binding.dart';
+import '../modules/warehouse/views/warehouse_view.dart';
 
 part 'app_routes.dart';
 
@@ -36,6 +42,21 @@ class AppPages {
       name: _Paths.PRODUCT,
       page: () => const ProductView(),
       binding: ProductBinding(),
+    ),
+    GetPage(
+      name: _Paths.WAREHOUSE,
+      page: () => const WarehouseView(),
+      binding: WarehouseBinding(),
+    ),
+    GetPage(
+      name: _Paths.SUBSCRIPTION_CREATE,
+      page: () => const SubscriptionCreateView(),
+      binding: SubscriptionCreateBinding(),
+    ),
+    GetPage(
+      name: _Paths.SUBSCRIPTIONS,
+      page: () => const SubscriptionsView(),
+      binding: SubscriptionsBinding(),
     ),
   ];
 }

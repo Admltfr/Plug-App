@@ -9,7 +9,17 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Produk'), centerTitle: true),
+      appBar: AppBar(
+        title: const Text('Produk'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.subscriptions),
+            tooltip: 'Langganan Saya',
+            onPressed: () => Get.toNamed(Routes.SUBSCRIPTIONS),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
