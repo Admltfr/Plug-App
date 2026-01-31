@@ -1,5 +1,7 @@
 enum UserRole { seller, customer }
 
+enum TransferStatus { PENDING, COMPLETED, FAILED }
+
 extension UserRoleX on UserRole {
   String get apiValue {
     switch (this) {
