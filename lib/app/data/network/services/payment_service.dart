@@ -21,11 +21,7 @@ class PaymentService {
 
     logSuccess('Saldo dimuat', tag: 'WalletBalance');
 
-    if (data.containsKey('balance') && !data.containsKey('id')) {
-      return Wallet(id: '', balance: (data['balance'] as num).toDouble());
-    }
-
-    return Wallet.fromJson(data);
+    return Wallet.fromJson({'id': '', 'balance': data['balance']});
   }
 
   Future<Map<String, dynamic>> topup(num amount) async {
@@ -39,7 +35,7 @@ class PaymentService {
 
     logSuccess('Topup dibuat: ${data['orderId']}', tag: 'TopupCreate');
 
-    return data; 
+    return data;
   }
 
   Future<Transfer> pay(String lenderId, num amount) async {
