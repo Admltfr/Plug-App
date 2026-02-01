@@ -16,7 +16,7 @@ class HomeView extends GetView<HomeController> {
           IconButton(
             icon: const Icon(Icons.subscriptions),
             tooltip: 'Langganan Saya',
-            onPressed: () => Get.toNamed(Routes.SUBSCRIPTIONS),
+            onPressed: () => Get.toNamed(Routes.WALLET_HOME),
           ),
         ],
       ),
@@ -24,6 +24,10 @@ class HomeView extends GetView<HomeController> {
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
+            ElevatedButton(
+              onPressed: () => Get.toNamed(Routes.TOPUP),
+              child: const Text('Top Up'),
+            ),
             Row(
               children: [
                 Expanded(

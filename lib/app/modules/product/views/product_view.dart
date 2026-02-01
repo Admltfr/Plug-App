@@ -50,17 +50,6 @@ class ProductView extends GetView<ProductController> {
                 style: const TextStyle(fontSize: 12),
               ),
               const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed:
-                      () => Get.toNamed(
-                        Routes.SUBSCRIPTION_CREATE,
-                        parameters: {'productId': p.id},
-                      ),
-                  child: const Text('Langganan Produk'),
-                ),
-              ),
             ],
           ),
         );

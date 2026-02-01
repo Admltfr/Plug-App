@@ -7,9 +7,9 @@ abstract class Routes {
   static const LOGIN = _Paths.LOGIN;
   static const REGISTER = _Paths.REGISTER;
   static const PRODUCT = _Paths.PRODUCT;
-  static const WAREHOUSE = _Paths.WAREHOUSE;
-  static const SUBSCRIPTION_CREATE = _Paths.SUBSCRIPTION_CREATE;
-  static const SUBSCRIPTIONS = _Paths.SUBSCRIPTIONS;
+  static const WALLET_HOME = _Paths.WALLET_HOME;
+  static const TOPUP = _Paths.TOPUP;
+  static const PAYMENT = _Paths.PAYMENT;
 }
 
 abstract class _Paths {
@@ -18,7 +18,7 @@ abstract class _Paths {
   static const LOGIN = '/login';
   static const REGISTER = '/register';
   static const PRODUCT = '/product';
-  static const WAREHOUSE = '/warehouse';
-  static const SUBSCRIPTION_CREATE = '/subscription-create';
-  static const SUBSCRIPTIONS = '/subscriptions';
+  static const WALLET_HOME = '/wallet-home';
+  static const TOPUP = '/topup';
+  static const PAYMENT = '/payment';
 }
