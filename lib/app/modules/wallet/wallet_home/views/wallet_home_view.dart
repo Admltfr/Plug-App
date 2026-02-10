@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:plug/app/routes/app_pages.dart';
+import 'package:plug/app/utils/role_utils.dart';
 import '../controllers/wallet_home_controller.dart';
 
 class WalletHomeView extends GetView<WalletHomeController> {
@@ -16,23 +17,16 @@ class WalletHomeView extends GetView<WalletHomeController> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              Text(
-                'Balance: ${controller.balance.value}',
-                style: const TextStyle(fontSize: 24),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () => Get.toNamed(Routes.TOPUP),
-                child: const Text('Top Up'),
-              ),
-              ElevatedButton(
-                onPressed: () => Get.toNamed(Routes.PAYMENT),
-                child: const Text('Pay Lender'),
-              ),
-              const SizedBox(height: 16),
+              Text('Balance: ${controller.balance.value}'),
+              const SizedBox(height: 12),
+              if (RoleUtils.isBorrower())
+                ElevatedButton(
+                  onPressed: () => Get.toNamed(Routes.TOPUP),
+                  child: const Text('Top Up'),
+                ),
               ElevatedButton(
                 onPressed: controller.refreshBalance,
-                child: const Text('Refresh Balance'),
+                child: const Text('Refresh Saldo'),
               ),
             ],
           ),

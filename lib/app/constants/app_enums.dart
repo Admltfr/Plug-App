@@ -1,5 +1,7 @@
 enum UserRole { seller, customer }
 
+enum AppRole { SELLER, CUSTOMER }
+
 enum TransferStatus { PENDING, COMPLETED, FAILED }
 
 extension UserRoleX on UserRole {

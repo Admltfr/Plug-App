@@ -9,7 +9,10 @@ abstract class Routes {
   static const PRODUCT = _Paths.PRODUCT;
   static const WALLET_HOME = _Paths.WALLET_HOME;
   static const TOPUP = _Paths.TOPUP;
-  static const PAYMENT = _Paths.PAYMENT;
+  static const LOAN_DETAIL = _Paths.LOAN_DETAIL;
+  static const LOAN_CONFIRM = _Paths.LOAN_CONFIRM;
+  static const CHAT = _Paths.CHAT;
+  static const LOAN_LIST = _Paths.LOAN_LIST;
 }
 
 abstract class _Paths {
@@ -20,5 +23,8 @@ abstract class _Paths {
   static const PRODUCT = '/product';
   static const WALLET_HOME = '/wallet-home';
   static const TOPUP = '/topup';
-  static const PAYMENT = '/payment';
+  static const LOAN_DETAIL = '/loan-detail';
+  static const LOAN_CONFIRM = '/loan-confirm';
+  static const CHAT = '/chat';
+  static const LOAN_LIST = '/loan-list';
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:plug/app/data/network/api_client.dart';
-import 'package:plug/app/routes/app_pages.dart';
+import 'package:plug/app/utils/role_utils.dart';
 import '../controllers/product_controller.dart';
 
 class ProductView extends GetView<ProductController> {
@@ -49,7 +49,40 @@ class ProductView extends GetView<ProductController> {
                 'Seller: ${p.seller.name} (${p.seller.email})',
                 style: const TextStyle(fontSize: 12),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
+              if (RoleUtils.isBorrower())
+                Obx(() {
+                  final loan = controller.currentLoan.value;
+                  if (loan == null) {
+                    return ElevatedButton(
+                      onPressed: controller.requestLoan,
+                      child: const Text('Pinjam Produk'),
+                    );
+                  }
+                  final status = '${loan['status']}';
+                  if (status == 'PENDING') {
+                    return ElevatedButton(
+                      onPressed: null,
+                      child: const Text('Menunggu respons'),
+                    );
+                  }
+                  if (status == 'ACCEPTED') {
+                    return ElevatedButton(
+                      onPressed: controller.payAcceptedLoan,
+                      child: const Text('Bayar & Chat'),
+                    );
+                  }
+                  if (status == 'PAID') {
+                    return ElevatedButton(
+                      onPressed: controller.openChatForPaid,
+                      child: const Text('Buka Chat'),
+                    );
+                  }
+                  return ElevatedButton(
+                    onPressed: controller.requestLoan,
+                    child: const Text('Pinjam Produk'),
+                  );
+                }),
             ],
           ),
         );

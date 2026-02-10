@@ -38,25 +38,27 @@ class PaymentService {
     return data;
   }
 
-  Future<Transfer> pay(String lenderId, num amount) async {
+  Future<Transfer> pay(String loanId) async {
     final Response? res = await tryOrNullAsync<Response>(() async {
-      return await api.private.post(
-        '/payment/pay',
-        data: {'lenderId': lenderId, 'amount': amount},
-      );
+      return await api.private.post('/payment/pay', data: {'loanId': loanId});
     }, tag: 'PayBalance');
 
     if (res == null) throw Exception('Gagal membayar.');
-
     final data = res.data['data'] as Map<String, dynamic>;
+
+    final amtRaw = data['amount'];
+    final amt =
+        amtRaw is num
+            ? amtRaw.toDouble()
+            : (amtRaw is String ? double.tryParse(amtRaw) ?? 0.0 : 0.0);
 
     logSuccess('Pembayaran berhasil: ${data['transferId']}', tag: 'PayBalance');
 
     return Transfer(
       id: data['transferId'] ?? '',
       fromCustomerId: '',
-      toSellerId: lenderId,
-      amount: (data['amount'] as num).toDouble(),
+      toSellerId: '',
+      amount: amt,
       status: TransferStatus.COMPLETED,
     );
   }

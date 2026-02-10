@@ -4,10 +4,16 @@ import '../modules/auth/login/bindings/login_binding.dart';
 import '../modules/auth/login/views/login_view.dart';
 import '../modules/auth/register/bindings/register_binding.dart';
 import '../modules/auth/register/views/register_view.dart';
+import '../modules/chat/bindings/chat_binding.dart';
+import '../modules/chat/views/chat_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
-import '../modules/payment/bindings/payment_binding.dart';
-import '../modules/payment/views/payment_view.dart';
+import '../modules/loan/loan_confirm/bindings/loan_confirm_binding.dart';
+import '../modules/loan/loan_confirm/views/loan_confirm_view.dart';
+import '../modules/loan/loan_detail/bindings/loan_detail_binding.dart';
+import '../modules/loan/loan_detail/views/loan_detail_view.dart';
+import '../modules/loan/loan_list/bindings/loan_list_binding.dart';
+import '../modules/loan/loan_list/views/loan_list_view.dart';
 import '../modules/product/bindings/product_binding.dart';
 import '../modules/product/views/product_view.dart';
 import '../modules/wallet/topup/bindings/topup_binding.dart';
@@ -54,9 +60,24 @@ class AppPages {
       binding: TopupBinding(),
     ),
     GetPage(
-      name: _Paths.PAYMENT,
-      page: () => const PaymentView(),
-      binding: PaymentBinding(),
+      name: _Paths.LOAN_DETAIL,
+      page: () => const LoanDetailView(),
+      binding: LoanDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.LOAN_CONFIRM,
+      page: () => const LoanConfirmView(),
+      binding: LoanConfirmBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHAT,
+      page: () => const ChatView(),
+      binding: ChatBinding(),
+    ),
+    GetPage(
+      name: _Paths.LOAN_LIST,
+      page: () => const LoanListView(),
+      binding: LoanListBinding(),
     ),
   ];
 }
