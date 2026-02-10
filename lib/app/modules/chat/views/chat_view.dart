@@ -34,12 +34,65 @@ class ChatView extends GetView<ChatController> {
                         path.startsWith('/images')
                             ? '$host$path'
                             : '$host/images/$path';
-                    title = Image.network(
-                      imageUrl,
-                      height: 160,
-                      fit: BoxFit.cover,
-                      errorBuilder:
-                          (_, __, ___) => const Text('Gambar gagal dimuat'),
+
+                    title = GestureDetector(
+                      onTap: () {
+                        Get.dialog(
+                          Dialog(
+                            backgroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,
+                            ),
+                            insetPadding: EdgeInsets.zero,
+                            child: SizedBox.expand(
+                              child: Stack(
+                                children: [
+                                  InteractiveViewer(
+                                    minScale: 0.5,
+                                    maxScale: 4.0,
+                                    child: Center(
+                                      child: Image.network(
+                                        imageUrl,
+                                        fit: BoxFit.contain,
+                                        errorBuilder:
+                                            (_, __, ___) => const Padding(
+                                              padding: EdgeInsets.all(16),
+                                              child: Text(
+                                                'Gambar gagal dimuat',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 12,
+                                    right: 12,
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () => Get.back(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          barrierColor: Colors.black87,
+                          barrierDismissible: true,
+                        );
+                      },
+                      child: Image.network(
+                        imageUrl,
+                        height: 160,
+                        fit: BoxFit.cover,
+                        errorBuilder:
+                            (_, __, ___) => const Text('Gambar gagal dimuat'),
+                      ),
                     );
                   } else {
                     title = Text(
