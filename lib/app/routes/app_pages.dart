@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-
 import '../modules/auth/login/bindings/login_binding.dart';
 import '../modules/auth/login/views/login_view.dart';
 import '../modules/auth/register/bindings/register_binding.dart';
@@ -14,8 +13,14 @@ import '../modules/loan/loan_detail/bindings/loan_detail_binding.dart';
 import '../modules/loan/loan_detail/views/loan_detail_view.dart';
 import '../modules/loan/loan_list/bindings/loan_list_binding.dart';
 import '../modules/loan/loan_list/views/loan_list_view.dart';
+import '../modules/loan/loan_lender_list/views/loan_lender_list_view.dart';
+import '../modules/loan/loan_lender_list/bindings/loan_lender_list_binding.dart';
+import '../modules/location/bindings/location_binding.dart';
+import '../modules/location/views/location_view.dart';
 import '../modules/product/bindings/product_binding.dart';
 import '../modules/product/views/product_view.dart';
+import '../modules/qr/views/qr_scan_view.dart';
+import '../modules/qr/views/qr_view.dart';
 import '../modules/wallet/topup/bindings/topup_binding.dart';
 import '../modules/wallet/topup/views/topup_view.dart';
 import '../modules/wallet/wallet_home/bindings/wallet_home_binding.dart';
@@ -78,6 +83,18 @@ class AppPages {
       name: _Paths.LOAN_LIST,
       page: () => const LoanListView(),
       binding: LoanListBinding(),
+    ),
+    GetPage(
+      name: _Paths.LOCATION,
+      page: () => const LocationView(),
+      binding: LocationBinding(),
+    ),
+    GetPage(name: _Paths.QR, page: () => const QrView()),
+    GetPage(name: _Paths.QR_SCAN, page: () => const QrScanView()),
+    GetPage(
+      name: _Paths.LOAN_LENDER_LIST,
+      page: () => const LoanLenderListView(),
+      binding: LoanLenderListBinding(),
     ),
   ];
 }

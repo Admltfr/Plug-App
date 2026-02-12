@@ -13,6 +13,10 @@ abstract class Routes {
   static const LOAN_CONFIRM = _Paths.LOAN_CONFIRM;
   static const CHAT = _Paths.CHAT;
   static const LOAN_LIST = _Paths.LOAN_LIST;
+  static const LOCATION = _Paths.LOCATION;
+  static const QR = _Paths.QR;
+  static const QR_SCAN = _Paths.QR_SCAN;
+  static const LOAN_LENDER_LIST = _Paths.LOAN_LENDER_LIST;
 }
 
 abstract class _Paths {
@@ -27,4 +31,8 @@ abstract class _Paths {
   static const LOAN_CONFIRM = '/loan-confirm';
   static const CHAT = '/chat';
   static const LOAN_LIST = '/loan-list';
+  static const LOCATION = '/location';
+  static const QR = '/qr';
+  static const QR_SCAN = '/qr-scan';
+  static const LOAN_LENDER_LIST = '/loan-lender-list';
 }

@@ -5,29 +5,56 @@ import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:plug/app/data/network/api_client.dart';
 import 'package:plug/app/data/network/services/chat_service.dart';
+import 'package:plug/app/data/network/services/meeting_service.dart';
 
 class ChatController extends GetxController {
   final api = Get.find<ApiClient>();
   late final ChatService chat = ChatService(api);
+  late final MeetingService meetingService = MeetingService(api);
 
   final messages = <Map<String, dynamic>>[].obs;
+  final meeting = Rxn<Map<String, dynamic>>();
   final textCtrl = TextEditingController();
   IO.Socket? socket;
   late final String roomId;
   late final String otherId;
+  late final String loanId;
 
   @override
   void onInit() {
     super.onInit();
     roomId = Get.parameters['roomId'] ?? '';
     otherId = Get.parameters['otherId'] ?? '';
+    loanId = Get.parameters['loanId'] ?? '';
     _connectSocket();
     _loadInitial();
+    _loadMeeting();
   }
 
   Future<void> _loadInitial() async {
     final list = await chat.getMessages(roomId);
     messages.assignAll(list);
+  }
+
+  Future<void> _loadMeeting() async {
+    if (loanId.isEmpty) return;
+    try {
+      final m = await meetingService.getMeeting(loanId);
+      meeting.value = m.isEmpty ? null : m;
+    } catch (_) {}
+  }
+
+  Future<void> reloadMeeting() async {
+    await _loadMeeting();
+  }
+
+  void setMeetingLocal(Map<String, dynamic> result) {
+    meeting.value = {
+      'lat': result['lat'],
+      'lon': result['lon'],
+      'address': result['address'],
+      'status': 'PENDING',
+    };
   }
 
   Future<void> _connectSocket() async {
@@ -48,6 +75,7 @@ class ChatController extends GetxController {
       final msg = Map<String, dynamic>.from(data['message']);
       messages.insert(0, msg);
     });
+    socket!.on('meeting:updated', (_) => _loadMeeting());
   }
 
   Future<void> sendText() async {
@@ -63,6 +91,34 @@ class ChatController extends GetxController {
     if (picked == null) return;
     final url = await chat.uploadImage(File(picked.path));
     socket?.emit('chat:send', {'roomId': roomId, 'imageUrl': url});
+  }
+
+  Future<void> acceptMeeting() async {
+    if (loanId.isEmpty) {
+      Get.snackbar('Info', 'loanId tidak ditemukan');
+      return;
+    }
+    try {
+      final updated = await meetingService.decide(loanId, decision: 'ACCEPT');
+      meeting.value = updated;
+      Get.snackbar('Sukses', 'Lokasi disetujui');
+    } catch (e) {
+      Get.snackbar('Gagal', e.toString());
+    }
+  }
+
+  Future<void> rejectMeeting() async {
+    if (loanId.isEmpty) {
+      Get.snackbar('Info', 'loanId tidak ditemukan');
+      return;
+    }
+    try {
+      final updated = await meetingService.decide(loanId, decision: 'REJECT');
+      meeting.value = updated;
+      Get.snackbar('Sukses', 'Lokasi ditolak');
+    } catch (e) {
+      Get.snackbar('Gagal', e.toString());
+    }
   }
 
   @override

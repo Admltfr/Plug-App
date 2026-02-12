@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:plug/app/routes/app_pages.dart';
 import 'package:plug/app/data/network/api_client.dart';
 import '../controllers/loan_list_controller.dart';
 
@@ -30,8 +31,11 @@ class LoanListView extends GetView<LoanListController> {
                 product['image_url'] != null
                     ? '$host/images/${product['image_url']}'
                     : null;
+
             return ListTile(
-              onTap: () => controller.onTapLoan(loan),
+              onTap: () {
+                Get.toNamed(Routes.LOAN_DETAIL, arguments: {'loan': loan});
+              },
               leading:
                   imageUrl != null
                       ? Image.network(

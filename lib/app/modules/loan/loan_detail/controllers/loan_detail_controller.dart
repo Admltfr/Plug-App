@@ -1,44 +1,104 @@
 import 'package:get/get.dart';
 import 'package:plug/app/data/network/api_client.dart';
-import 'package:plug/app/data/network/services/payment_service.dart';
 import 'package:plug/app/data/network/services/chat_service.dart';
+import 'package:plug/app/data/network/services/meeting_service.dart';
+import 'package:plug/app/utils/logger.dart';
+import 'package:plug/app/utils/role_utils.dart';
+import 'package:plug/app/routes/app_pages.dart';
 
 class LoanDetailController extends GetxController {
   final api = Get.find<ApiClient>();
-  late final PaymentService payment = PaymentService(api);
   late final ChatService chat = ChatService(api);
+  late final MeetingService meetingService = MeetingService(api);
 
   final loan = Rxn<Map<String, dynamic>>();
   final isPaying = false.obs;
+  final meeting = Rxn<Map<String, dynamic>>();
+
+  bool get isAccepted => (loan.value?['status'] ?? '') == 'ACCEPTED';
+  bool get isPaid => (loan.value?['status'] ?? '') == 'PAID';
+  bool get isWaitingForReturn =>
+      (loan.value?['status'] ?? '') == 'WAITING_FOR_RETURN';
+  bool get meetingAccepted => (meeting.value?['status'] ?? '') == 'ACCEPTED';
+  bool get isPending => (loan.value?['status'] ?? '') == 'PENDING';
+  bool get isCompleted => (loan.value?['status'] ?? '') == 'COMPLETED';
 
   @override
   void onInit() {
     super.onInit();
-    loan.value = (Get.arguments?['loan'] as Map<String, dynamic>?);
+    loan.value = Map<String, dynamic>.from((Get.arguments?['loan']) ?? {});
+    _loadMeeting();
   }
 
-  bool get isAccepted => (loan.value?['status'] ?? '') == 'ACCEPTED';
-  bool get isPaid => (loan.value?['status'] ?? '') == 'PAID';
-  String get lenderId => loan.value?['lender_id'] ?? '';
-  String get productId => '${loan.value?['product_id']}';
+  Future<void> _loadMeeting() async {
+    final loanId = '${loan.value?['id'] ?? ''}';
+    if (loanId.isEmpty) return;
+    try {
+      final m = await meetingService.getMeeting(loanId);
+      meeting.value = m.isEmpty ? null : m;
+      logInfo('Meeting loaded for $loanId', tag: 'LoanDetail');
+    } catch (_) {}
+  }
 
   Future<void> pay() async {
     if (!isAccepted) {
       Get.snackbar('Info', 'Menunggu persetujuan lender terlebih dahulu.');
       return;
     }
+    if (!RoleUtils.isBorrower()) {
+      Get.snackbar('Info', 'Hanya borrower yang dapat melakukan pembayaran.');
+      return;
+    }
+
     isPaying.value = true;
     try {
       final loanId = '${loan.value?['id']}';
-      await payment.pay(loanId);
-      Get.snackbar('Sukses', 'Pembayaran berhasil');
+      await api.private.post('/payment/pay', data: {'loanId': loanId});
       final current = Map<String, dynamic>.from(loan.value!);
       current['status'] = 'PAID';
       loan.value = current;
+      Get.snackbar('Sukses', 'Pembayaran berhasil');
     } catch (e) {
       Get.snackbar('Gagal', e.toString());
     } finally {
       isPaying.value = false;
+    }
+  }
+
+  Future<void> showQr() async {
+    if (!isPaid || !meetingAccepted) {
+      Get.snackbar(
+        'Info',
+        'QR tersedia setelah pembayaran dan lokasi disetujui.',
+      );
+      return;
+    }
+    final loanId = '${loan.value?['id'] ?? ''}';
+    if (loanId.isEmpty) return;
+    Get.toNamed(Routes.QR, parameters: {'loanId': loanId});
+  }
+
+  Future<void> scanQr() async {
+    if (!isPaid || !meetingAccepted) {
+      Get.snackbar(
+        'Info',
+        'Scan tersedia setelah pembayaran dan lokasi disetujui.',
+      );
+      return;
+    }
+    final loanId = '${loan.value?['id'] ?? ''}';
+    if (loanId.isEmpty) return;
+    final result = await Get.toNamed(
+      Routes.QR_SCAN,
+      parameters: {'loanId': loanId},
+    );
+    if (result == true) {
+      final current = Map<String, dynamic>.from(loan.value!);
+      current['status'] = 'WAITING_FOR_RETURN';
+      loan.value = current;
+      await _loadMeeting();
+
+      Get.snackbar('Sukses', 'Menunggu pengembalian barang');
     }
   }
 
@@ -48,12 +108,33 @@ class LoanDetailController extends GetxController {
       return;
     }
     try {
-      final room = await chat.ensureRoom(lenderId, productId: productId);
+      final lenderId = '${loan.value?['lender_id']}';
+      final borrowerId = '${loan.value?['borrower_id']}';
+      final productId = '${loan.value?['product_id']}';
+      final loanId = '${loan.value?['id'] ?? ''}';
+
+      final otherId = RoleUtils.isBorrower() ? lenderId : borrowerId;
+
+      final room = await chat.ensureRoom(otherId, productId: productId);
       final roomId = room['id'] ?? room['roomId'];
+
       Get.toNamed(
-        '/chat',
-        parameters: {'roomId': '$roomId', 'otherId': lenderId},
+        Routes.CHAT,
+        parameters: {'roomId': '$roomId', 'otherId': otherId, 'loanId': loanId},
       );
+    } catch (e) {
+      Get.snackbar('Gagal', e.toString());
+    }
+  }
+
+  Future<void> markReturned() async {
+    final id = '${loan.value?['id'] ?? ''}';
+    if (id.isEmpty) return;
+    try {
+      final res = await api.private.patch('/loan/$id/returned');
+      final updated = Map<String, dynamic>.from(res.data['data']);
+      loan.value = updated;
+      Get.snackbar('Selesai', 'Barang sudah kembali, chat ditutup');
     } catch (e) {
       Get.snackbar('Gagal', e.toString());
     }

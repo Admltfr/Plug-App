@@ -195,6 +195,12 @@ class HomeView extends GetView<HomeController> {
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () => Get.toNamed(Routes.WALLET_HOME),
                     ),
+                    ListTile(
+                      leading: const Icon(Icons.list_alt),
+                      title: const Text('Daftar Peminjaman Saya'),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => Get.toNamed(Routes.LOAN_LENDER_LIST),
+                    ),
                   ],
                 ),
       ),

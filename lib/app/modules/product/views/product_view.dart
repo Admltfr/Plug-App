@@ -69,13 +69,13 @@ class ProductView extends GetView<ProductController> {
                   if (status == 'ACCEPTED') {
                     return ElevatedButton(
                       onPressed: controller.payAcceptedLoan,
-                      child: const Text('Bayar & Chat'),
+                      child: const Text('Bayar'),
                     );
                   }
                   if (status == 'PAID') {
                     return ElevatedButton(
                       onPressed: controller.openChatForPaid,
-                      child: const Text('Buka Chat'),
+                      child: const Text('Chat'),
                     );
                   }
                   return ElevatedButton(

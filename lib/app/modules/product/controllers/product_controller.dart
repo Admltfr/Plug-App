@@ -31,7 +31,6 @@ class ProductController extends GetxController {
     isLoading.value = true;
     try {
       product.value = await productService.fetchProduct(id.value);
-      // Muat loan milik borrower untuk produk ini
       await _loadCurrentLoanState();
       logInfo('Detail loaded: ${product.value?.name}', tag: 'ProductDetail');
     } catch (e) {
@@ -46,7 +45,9 @@ class ProductController extends GetxController {
     if (p == null) return;
     try {
       final loans = await loanService.borrowerLoans();
-      final found = loans.firstWhereOrNull((x) => x['product_id'] == p.id);
+      final found = loans.firstWhereOrNull(
+        (x) => x['product_id'] == p.id && x['status'] != 'COMPLETED',
+      );
       currentLoan.value = found;
     } catch (_) {}
   }
@@ -72,6 +73,13 @@ class ProductController extends GetxController {
     Get.toNamed(Routes.LOAN_DETAIL, arguments: {'loan': loan});
   }
 
+  Future<void> openLocationForPaid() async {
+    final loan = currentLoan.value;
+    if (loan == null) return;
+    final loanId = '${loan['id']}';
+    Get.toNamed(Routes.LOCATION, parameters: {'loanId': loanId});
+  }
+
   Future<void> openChatForPaid() async {
     final loan = currentLoan.value;
     if (loan == null) return;
@@ -81,7 +89,11 @@ class ProductController extends GetxController {
     final roomId = room['id'] ?? room['roomId'];
     Get.toNamed(
       '/chat',
-      parameters: {'roomId': '$roomId', 'otherId': lenderId},
+      parameters: {
+        'roomId': '$roomId',
+        'otherId': lenderId,
+        'loanId': '${loan['id']}',
+      },
     );
   }
 }
