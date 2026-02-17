@@ -52,4 +52,20 @@ class LoanService {
     final list = (res.data['data'] as List).cast<Map<String, dynamic>>();
     return list.map(Loan.fromJson).toList();
   }
+
+  Future<Loan> getLoan(String id) async {
+    final res = await tryOrNullAsync<Response>(() async {
+      return await api.private.get('/loan/$id');
+    }, tag: 'LoanService.getLoan');
+    if (res == null) throw Exception('Gagal memuat loan');
+    return Loan.fromJson(Map<String, dynamic>.from(res.data['data']));
+  }
+
+  Future<Loan> markReturned(String id) async {
+    final res = await tryOrNullAsync<Response>(() async {
+      return await api.private.patch('/loan/$id/returned');
+    }, tag: 'LoanService.markReturned');
+    if (res == null) throw Exception('Gagal menandai pengembalian');
+    return Loan.fromJson(Map<String, dynamic>.from(res.data['data']));
+  }
 }

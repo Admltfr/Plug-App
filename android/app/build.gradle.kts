@@ -37,6 +37,18 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    flavorDimensions += "default"
+    productFlavors {
+        create("bbug") {
+            dimension = "default"
+            applicationIdSuffix = ".borrower.debug"
+        }
+        create("lbug") {
+            dimension = "default"
+            applicationIdSuffix = ".lender.debug"
+        }
+    }
 }
 
 flutter {

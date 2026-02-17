@@ -31,16 +31,23 @@ class LoanListController extends GetxController {
     }
   }
 
-  void onTapLoan(Loan loan) async {
+  Future<void> refresh() async {
+    await load();
+  }
+
+  Future<void> onTapLoan(Loan loan) async {
     final status = loan.status.name;
     if (status == 'PENDING') {
-      Get.toNamed(Routes.PRODUCT, parameters: {'id': loan.productId});
+      await Get.toNamed(Routes.PRODUCT, parameters: {'id': loan.productId});
+      await refresh();
       return;
     }
     if (status == 'ACCEPTED' ||
         status == 'PAID' ||
+        status == 'MEETING' ||
         status == 'WAITING_FOR_RETURN') {
-      Get.toNamed(Routes.LOAN_DETAIL, arguments: {'loan': loan.toJson()});
+      await Get.toNamed(Routes.LOAN_DETAIL, arguments: {'loan': loan.toJson()});
+      await refresh();
       return;
     }
   }

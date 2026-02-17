@@ -49,7 +49,9 @@ class TopupController extends GetxController {
         await _initMidtrans();
       }
       if (Get.currentRoute != Routes.WALLET_HOME) {
-        Get.offAllNamed(Routes.WALLET_HOME);
+        Get.offAndToNamed(Routes.WALLET_HOME);
+      } else {
+        Get.back();
       }
       await _midtrans!.startPaymentUiFlow(token: token);
 

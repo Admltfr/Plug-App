@@ -30,12 +30,17 @@ class LoanLenderListController extends GetxController {
     }
   }
 
+  Future<void> refresh() async {
+    await load();
+  }
+
   void setFilter(String? status) {
     filterStatus.value = status;
     load();
   }
 
-  void onTapLoan(Loan loan) {
-    Get.toNamed(Routes.LOAN_DETAIL, arguments: {'loan': loan.toJson()});
+  Future<void> onTapLoan(Loan loan) async {
+    await Get.toNamed(Routes.LOAN_DETAIL, arguments: {'loan': loan.toJson()});
+    await refresh();
   }
 }

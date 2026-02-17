@@ -9,17 +9,12 @@ enum LoanStatus {
   ACCEPTED,
   REJECTED,
   PAID,
+  MEETING,
   WAITING_FOR_RETURN,
   COMPLETED,
 }
 
-enum MeetingStatus {
-  PENDING,
-  ACCEPTED,
-  REJECTED,
-  COMPLETED,
-  WAITING_FOR_RETURN,
-}
+enum MeetingStatus { PENDING, ACCEPTED, REJECTED, COMPLETED }
 
 extension UserRoleX on UserRole {
   String get apiValue => this == UserRole.lender ? 'LENDER' : 'BORROWER';

@@ -68,19 +68,36 @@ class ChatController extends GetxController {
     socket = IO.io(
       host,
       IO.OptionBuilder()
-          .setTransports(['websocket'])
+          .setTransports(['websocket', 'polling'])
+          .setPath('/socket.io')
           .enableForceNew()
-          .setExtraHeaders({'Authorization': 'Bearer $token'})
           .setAuth({'token': token})
           .build(),
     );
 
-    socket!.onConnect((_) => socket!.emit('chat:join', {'roomId': roomId}));
-    socket!.on('chat:new', (data) {
-      final msg = Map<String, dynamic>.from(data['message']);
-      messages.insert(0, msg);
-    });
-    socket!.on('meeting:updated', (_) => _loadMeeting());
+    void joinRoom() {
+      if (roomId.isNotEmpty) {
+        socket!.emit('chat:join', {'roomId': roomId});
+      }
+    }
+
+    socket!
+      ..onConnect((_) {
+        debugPrint('Socket connected');
+        joinRoom();
+      })
+      ..onReconnect((_) {
+        debugPrint('Socket reconnected');
+        joinRoom();
+      })
+      ..onReconnectAttempt((_) => debugPrint('Socket reconnecting...'))
+      ..onConnectError((err) => Get.snackbar('Soket', 'Gagal konek: $err'))
+      ..onError((err) => Get.snackbar('Soket', 'Error: $err'))
+      ..onDisconnect((_) => debugPrint('Socket disconnected'))
+      ..on('chat:new', (data) {
+        final msg = Map<String, dynamic>.from(data['message']);
+        messages.insert(0, msg);
+      });
   }
 
   Future<void> sendText() async {
