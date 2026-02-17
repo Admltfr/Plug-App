@@ -2,6 +2,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:plug/app/constants/app_enums.dart';
+import 'package:plug/app/data/models/meeting.dart';
+import 'package:plug/app/routes/app_pages.dart';
+import 'package:plug/app/utils/role_utils.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:plug/app/data/network/api_client.dart';
 import 'package:plug/app/data/network/services/chat_service.dart';
@@ -13,7 +17,7 @@ class ChatController extends GetxController {
   late final MeetingService meetingService = MeetingService(api);
 
   final messages = <Map<String, dynamic>>[].obs;
-  final meeting = Rxn<Map<String, dynamic>>();
+  final meeting = Rxn<Meeting>();
   final textCtrl = TextEditingController();
   IO.Socket? socket;
   late final String roomId;
@@ -40,7 +44,7 @@ class ChatController extends GetxController {
     if (loanId.isEmpty) return;
     try {
       final m = await meetingService.getMeeting(loanId);
-      meeting.value = m.isEmpty ? null : m;
+      meeting.value = m;
     } catch (_) {}
   }
 
@@ -49,12 +53,13 @@ class ChatController extends GetxController {
   }
 
   void setMeetingLocal(Map<String, dynamic> result) {
-    meeting.value = {
-      'lat': result['lat'],
-      'lon': result['lon'],
-      'address': result['address'],
-      'status': 'PENDING',
-    };
+    meeting.value = Meeting(
+      loanId: loanId,
+      lat: (result['lat'] as num).toDouble(),
+      lon: (result['lon'] as num).toDouble(),
+      address: result['address'] ?? '',
+      status: MeetingStatus.PENDING,
+    );
   }
 
   Future<void> _connectSocket() async {
@@ -91,6 +96,23 @@ class ChatController extends GetxController {
     if (picked == null) return;
     final url = await chat.uploadImage(File(picked.path));
     socket?.emit('chat:send', {'roomId': roomId, 'imageUrl': url});
+  }
+
+  Future<void> sendLocation() async {
+    if (!RoleUtils.isLender()) return;
+    if (loanId.isEmpty) {
+      Get.snackbar('Info', 'Context loanId tidak ditemukan');
+      return;
+    }
+    final result = await Get.toNamed(
+      Routes.LOCATION,
+      parameters: {'loanId': loanId},
+    );
+    if (result is Map && result.isNotEmpty) {
+      setMeetingLocal(Map<String, dynamic>.from(result));
+    } else {
+      await reloadMeeting();
+    }
   }
 
   Future<void> acceptMeeting() async {

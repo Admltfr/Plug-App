@@ -38,7 +38,7 @@ class LocationController extends GetxController {
     isLoading.value = true;
     try {
       await meeting.proposeLocation(
-        loanId.value,
+        loanId: loanId.value,
         lat: p.latitude,
         lon: p.longitude,
         address: address.value,

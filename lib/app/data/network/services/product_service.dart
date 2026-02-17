@@ -21,7 +21,7 @@ class ProductService {
     int page = 1,
     int limit = 10,
     String search = '',
-    String? sellerId,
+    String? lenderId,
   }) async {
     final response = await tryOrNullAsync<Response>(() async {
       return await api.public.get(
@@ -30,7 +30,7 @@ class ProductService {
           'page': page,
           'limit': limit,
           if (search.isNotEmpty) 'search': search,
-          if (sellerId?.isNotEmpty == true) 'seller_id': sellerId,
+          if (lenderId?.isNotEmpty == true) 'lender_id': lenderId,
         },
       );
     }, tag: 'ProductsFetch');

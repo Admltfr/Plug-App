@@ -12,7 +12,7 @@ class RegisterController extends GetxController {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  final selectedRole = UserRole.customer.obs;
+  final selectedRole = UserRole.borrower.obs;
   final isLoading = false.obs;
 
   Future<void> register() async {

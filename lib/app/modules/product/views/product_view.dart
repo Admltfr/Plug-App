@@ -46,7 +46,7 @@ class ProductView extends GetView<ProductController> {
               Text(p.description ?? 'Tidak ada deskripsi'),
               const SizedBox(height: 12),
               Text(
-                'Seller: ${p.seller.name} (${p.seller.email})',
+                'Lender: ${p.lender.name} (${p.lender.email})',
                 style: const TextStyle(fontSize: 12),
               ),
               const SizedBox(height: 24),
@@ -59,7 +59,7 @@ class ProductView extends GetView<ProductController> {
                       child: const Text('Pinjam Produk'),
                     );
                   }
-                  final status = '${loan['status']}';
+                  final status = '${loan.status}';
                   if (status == 'PENDING') {
                     return ElevatedButton(
                       onPressed: null,

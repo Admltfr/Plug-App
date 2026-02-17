@@ -8,11 +8,11 @@ class RoleUtils {
     final api = Get.find<ApiClient>();
     final token = api.authInterceptor.authToken;
     final roleStr = getRoleFromToken(token) ?? '';
-    if (roleStr.toUpperCase() == 'CUSTOMER') return AppRole.CUSTOMER;
-    if (roleStr.toUpperCase() == 'SELLER') return AppRole.SELLER;
+    if (roleStr.toUpperCase() == 'BORROWER') return AppRole.BORROWER;
+    if (roleStr.toUpperCase() == 'LENDER') return AppRole.LENDER;
     throw Exception('Unknown user role: $roleStr');
   }
 
-  static bool isBorrower() => currentRole() == AppRole.CUSTOMER;
-  static bool isLender() => currentRole() == AppRole.SELLER;
+  static bool isBorrower() => currentRole() == AppRole.BORROWER;
+  static bool isLender() => currentRole() == AppRole.LENDER;
 }

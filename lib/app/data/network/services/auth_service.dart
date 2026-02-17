@@ -65,7 +65,7 @@ class AuthService {
           'email': email,
           'password': password,
           'password_confirmation': passwordConfirmation,
-          'role': role.apiValue, // SELLER | CUSTOMER
+          'role': role.apiValue,
         },
       );
       logSuccess('Registrasi berhasil untuk $email', tag: 'AuthRegister');

@@ -1,4 +1,4 @@
-import 'seller.dart';
+import 'lender.dart';
 
 class Product {
   final String id;
@@ -7,7 +7,7 @@ class Product {
   final int price;
   final int stock;
   final String? imageUrl;
-  final Seller seller;
+  final Lender lender;
 
   Product({
     required this.id,
@@ -16,7 +16,7 @@ class Product {
     required this.price,
     required this.stock,
     this.imageUrl,
-    required this.seller,
+    required this.lender,
   });
 
   factory Product.fromJson(Map<String, dynamic> j) => Product(
@@ -26,6 +26,6 @@ class Product {
     price: (j['price'] as num).toInt(),
     stock: (j['stock'] as num).toInt(),
     imageUrl: j['image_url'],
-    seller: Seller.fromJson(j['seller']),
+    lender: Lender.fromJson(j['lender']),
   );
 }

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:plug/app/data/models/loan.dart';
 import 'package:plug/app/data/network/api_client.dart';
 import 'package:plug/app/data/network/services/loan_service.dart';
 import 'package:plug/app/routes/app_pages.dart';
@@ -8,7 +9,7 @@ class LoanLenderListController extends GetxController {
   late final LoanService loanService = LoanService(api);
 
   final isLoading = false.obs;
-  final items = <Map<String, dynamic>>[].obs;
+  final items = <Loan>[].obs;
   final filterStatus = RxnString();
 
   @override
@@ -34,7 +35,7 @@ class LoanLenderListController extends GetxController {
     load();
   }
 
-  void onTapLoan(Map<String, dynamic> loan) {
-    Get.toNamed(Routes.LOAN_DETAIL, arguments: {'loan': loan});
+  void onTapLoan(Loan loan) {
+    Get.toNamed(Routes.LOAN_DETAIL, arguments: {'loan': loan.toJson()});
   }
 }

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:plug/app/data/models/loan.dart';
 import 'package:plug/app/data/network/api_client.dart';
 import 'package:plug/app/data/network/services/loan_service.dart';
 import 'package:plug/app/data/network/services/chat_service.dart';
@@ -10,7 +11,7 @@ class LoanListController extends GetxController {
   late final ChatService chatService = ChatService(api);
 
   final isLoading = false.obs;
-  final items = <Map<String, dynamic>>[].obs;
+  final items = <Loan>[].obs;
 
   @override
   void onInit() {
@@ -30,25 +31,16 @@ class LoanListController extends GetxController {
     }
   }
 
-  void onTapLoan(Map<String, dynamic> loan) async {
-    final status = '${loan['status']}';
+  void onTapLoan(Loan loan) async {
+    final status = loan.status.name;
     if (status == 'PENDING') {
-      Get.toNamed(Routes.PRODUCT, parameters: {'id': '${loan['product_id']}'});
+      Get.toNamed(Routes.PRODUCT, parameters: {'id': loan.productId});
       return;
     }
-    if (status == 'ACCEPTED') {
-      Get.toNamed(Routes.LOAN_DETAIL, arguments: {'loan': loan});
-      return;
-    }
-    if (status == 'PAID') {
-      final lenderId = '${loan['lender_id']}';
-      final productId = '${loan['product_id']}';
-      final room = await chatService.ensureRoom(lenderId, productId: productId);
-      final roomId = room['id'] ?? room['roomId'];
-      Get.toNamed(
-        '/chat',
-        parameters: {'roomId': '$roomId', 'otherId': lenderId},
-      );
+    if (status == 'ACCEPTED' ||
+        status == 'PAID' ||
+        status == 'WAITING_FOR_RETURN') {
+      Get.toNamed(Routes.LOAN_DETAIL, arguments: {'loan': loan.toJson()});
       return;
     }
   }

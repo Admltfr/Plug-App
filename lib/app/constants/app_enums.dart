@@ -1,25 +1,27 @@
-enum UserRole { seller, customer }
+enum UserRole { lender, borrower }
 
-enum AppRole { SELLER, CUSTOMER }
+enum AppRole { LENDER, BORROWER }
 
 enum TransferStatus { PENDING, COMPLETED, FAILED }
 
-extension UserRoleX on UserRole {
-  String get apiValue {
-    switch (this) {
-      case UserRole.seller:
-        return 'SELLER';
-      case UserRole.customer:
-        return 'CUSTOMER';
-    }
-  }
+enum LoanStatus {
+  PENDING,
+  ACCEPTED,
+  REJECTED,
+  PAID,
+  WAITING_FOR_RETURN,
+  COMPLETED,
+}
 
-  String get display {
-    switch (this) {
-      case UserRole.seller:
-        return 'Seller';
-      case UserRole.customer:
-        return 'Customer';
-    }
-  }
+enum MeetingStatus {
+  PENDING,
+  ACCEPTED,
+  REJECTED,
+  COMPLETED,
+  WAITING_FOR_RETURN,
+}
+
+extension UserRoleX on UserRole {
+  String get apiValue => this == UserRole.lender ? 'LENDER' : 'BORROWER';
+  String get display => this == UserRole.lender ? 'Lender' : 'Borrower';
 }

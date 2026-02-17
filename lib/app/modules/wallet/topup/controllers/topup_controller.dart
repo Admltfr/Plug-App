@@ -4,6 +4,7 @@ import 'package:plug/app/data/network/api_client.dart';
 import 'package:plug/app/data/network/services/payment_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:midtrans_sdk/midtrans_sdk.dart';
+import 'package:plug/app/routes/app_pages.dart';
 
 class TopupController extends GetxController {
   final api = Get.find<ApiClient>();
@@ -47,10 +48,12 @@ class TopupController extends GetxController {
       if (_midtrans == null) {
         await _initMidtrans();
       }
-
+      if (Get.currentRoute != Routes.WALLET_HOME) {
+        Get.offAllNamed(Routes.WALLET_HOME);
+      }
       await _midtrans!.startPaymentUiFlow(token: token);
 
-      Get.snackbar('Info', 'Top up dibuka. Setelah selesai, refresh saldo.');
+      Get.snackbar('Info', 'Top up selesai. Silakan refresh saldo.');
     } catch (e) {
       Get.snackbar('Gagal', 'Tidak bisa memulai pembayaran: $e');
     }

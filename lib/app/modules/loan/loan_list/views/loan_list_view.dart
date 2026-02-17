@@ -24,18 +24,15 @@ class LoanListView extends GetView<LoanListController> {
           separatorBuilder: (_, __) => const Divider(),
           itemBuilder: (_, i) {
             final loan = controller.items[i];
-            final product = loan['product'] ?? {};
-            final status = '${loan['status']}';
+            final product = loan.product;
+            final status = loan.status.name;
             final host = ApiClient.url.replaceAll('/api', '');
             final imageUrl =
-                product['image_url'] != null
-                    ? '$host/images/${product['image_url']}'
+                product?.imageUrl != null
+                    ? '$host/images/${product!.imageUrl}'
                     : null;
-
             return ListTile(
-              onTap: () {
-                Get.toNamed(Routes.LOAN_DETAIL, arguments: {'loan': loan});
-              },
+              onTap: () => controller.onTapLoan(loan),
               leading:
                   imageUrl != null
                       ? Image.network(
@@ -49,8 +46,8 @@ class LoanListView extends GetView<LoanListController> {
                         height: 56,
                         color: Colors.grey[200],
                       ),
-              title: Text('${product['name'] ?? '(produk)'}'),
-              subtitle: Text('Status: $status • Rp ${loan['amount']}'),
+              title: Text(product?.name ?? '(produk)'),
+              subtitle: Text('Status: $status • Rp ${loan.amount}'),
               trailing: const Icon(Icons.chevron_right),
             );
           },

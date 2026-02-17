@@ -1,17 +1,17 @@
 import 'package:get/get.dart';
+import 'package:plug/app/data/models/loan.dart';
 import 'package:plug/app/data/network/api_client.dart';
 import 'package:plug/app/data/network/services/loan_service.dart';
 
 class LoanConfirmController extends GetxController {
-  final api = Get.find<ApiClient>();
-  late final LoanService service = LoanService(api);
-
+  late final LoanService service;
+  final items = <Loan>[].obs;
   final isLoading = false.obs;
-  final items = <Map<String, dynamic>>[].obs;
 
   @override
   void onInit() {
     super.onInit();
+    service = LoanService(Get.find<ApiClient>());
     load();
   }
 
@@ -29,14 +29,8 @@ class LoanConfirmController extends GetxController {
 
   Future<void> accept(String id) async {
     try {
-      final data = await service.confirmLoan(id, 'ACCEPT');
-      final roomId = '${data['roomId']}';
-      final borrowerId = '${data['borrower_id']}';
+      await service.confirmLoan(id, 'ACCEPT');
       Get.snackbar('Sukses', 'Permintaan diterima');
-      Get.toNamed(
-        '/chat',
-        parameters: {'roomId': roomId, 'otherId': borrowerId},
-      );
       await load();
     } catch (e) {
       Get.snackbar('Gagal', e.toString());
@@ -46,7 +40,7 @@ class LoanConfirmController extends GetxController {
   Future<void> reject(String id) async {
     try {
       await service.confirmLoan(id, 'REJECT');
-      Get.snackbar('Sukses', 'Permintaan ditolak');
+      Get.snackbar('Ditolak', 'Permintaan ditolak');
       await load();
     } catch (e) {
       Get.snackbar('Gagal', e.toString());

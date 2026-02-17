@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:plug/app/data/network/api_client.dart';
 import 'package:plug/app/data/network/services/meeting_service.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class QrView extends StatefulWidget {
   const QrView({super.key});
@@ -40,15 +40,17 @@ class _QrViewState extends State<QrView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('QR Pertemuan')),
-      body: Center(
-        child:
-            loading
-                ? const CircularProgressIndicator()
-                : QrImageView(
-                  data: token,
-                  size: 260,
-                  backgroundColor: Colors.white,
-                ),
+      body: SafeArea(
+        child: Center(
+          child:
+              loading
+                  ? const CircularProgressIndicator()
+                  : QrImageView(
+                    data: token,
+                    version: QrVersions.auto,
+                    size: 240,
+                  ),
+        ),
       ),
     );
   }

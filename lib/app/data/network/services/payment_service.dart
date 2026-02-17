@@ -56,8 +56,8 @@ class PaymentService {
 
     return Transfer(
       id: data['transferId'] ?? '',
-      fromCustomerId: '',
-      toSellerId: '',
+      fromBorrowerId: '',
+      toLenderId: '',
       amount: amt,
       status: TransferStatus.COMPLETED,
     );

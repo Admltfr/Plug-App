@@ -188,7 +188,6 @@ class HomeView extends GetView<HomeController> {
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () => Get.toNamed(Routes.LOAN_CONFIRM),
                     ),
-                    const Divider(),
                     ListTile(
                       leading: const Icon(Icons.account_balance_wallet),
                       title: const Text('Wallet Saya'),

@@ -10,23 +10,23 @@ TransferStatus _transferStatusOf(dynamic s) {
 
 class Transfer {
   final String id;
-  final String fromCustomerId;
-  final String toSellerId;
+  final String fromBorrowerId;
+  final String toLenderId;
   final double amount;
   final TransferStatus status;
 
   Transfer({
     required this.id,
-    required this.fromCustomerId,
-    required this.toSellerId,
+    required this.fromBorrowerId,
+    required this.toLenderId,
     required this.amount,
     required this.status,
   });
 
   factory Transfer.fromJson(Map<String, dynamic> j) => Transfer(
     id: j['id'] ?? '',
-    fromCustomerId: j['from_customer_id'] ?? '',
-    toSellerId: j['to_seller_id'] ?? '',
+    fromBorrowerId: j['from_borrower_id'] ?? '',
+    toLenderId: j['to_lender_id'] ?? '',
     amount:
         (j['amount'] is num)
             ? (j['amount'] as num).toDouble()

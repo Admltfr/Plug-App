@@ -1,14 +1,14 @@
 class Wallet {
   final String id;
   final double balance;
-  final String? customerId;
-  final String? sellerId;
+  final String? borrowerId;
+  final String? lenderId;
 
   Wallet({
     required this.id,
     required this.balance,
-    this.customerId,
-    this.sellerId,
+    this.borrowerId,
+    this.lenderId,
   });
 
   factory Wallet.fromJson(Map<String, dynamic> j) => Wallet(
@@ -17,7 +17,7 @@ class Wallet {
         (j['balance'] is num)
             ? (j['balance'] as num).toDouble()
             : double.tryParse('${j['balance']}') ?? 0.0,
-    customerId: j['customer_id'],
-    sellerId: j['seller_id'],
+    borrowerId: j['borrower_id'],
+    lenderId: j['lender_id'],
   );
 }
